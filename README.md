@@ -3,6 +3,7 @@ Se cambio la ruta
 #### Rutas
 - Ruta inicial: http://localhost:8081/storehouse/v1/
 - Documentacion API-REST: http://localhost:8081/storehouse/v1/doc/swagger-ui/index.html  
+- git remote add github https://github.com/gumiel/proyecto-almacenes_almacenes-backend.git
 
 #### Estructuras de las rutas  
 http://server:port/context-path/v1/controller/action/slug?parameter=150  
