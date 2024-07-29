@@ -1,0 +1,19 @@
+stages:
+  - prueba
+
+job_1:
+  stage: prueba
+  tags:
+    - ubuntu-root
+  script:
+    - echo "hola"
+    - docker stop almacenes-container
+    - docker rm almacenes-container
+    - docker rmi spring-api-image
+    - docker build -t "spring-api-image" .
+    - docker compose up -d
+#    - mvn dependency:go-offline
+#    - mvn clean install -DskipTests
+#    - docker stop almacenes-container
+#    - docker rm almacenes-container
+#    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app

@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+
+  almacenes-container:
+    image: spring-api-image
+    container_name: almacenes-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-container:5432/gestion_almacenes
+    networks:
+      - spring-network
+    depends_on:
+      - postgres-container
+
+  postgres-container:
+    image: 'postgres:15.7-alpine'
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: gestion_almacenes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      -  /opt/docker/gestion_almacenes/postgres_data:/var/lib/postgresql/data
+    networks:
+      - spring-network
+#    volumes:
+#      - mysql-volume:/var/lib/mysql
+
+networks:
+  spring-network:
+#volumes:
+#  mysql-volume:

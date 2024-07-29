@@ -1,0 +1,28 @@
+
+INSERT INTO public.order_product_type (active, created_date, last_modified_date, code, "name", description, "action", created_by, last_modified_by) VALUES(true, NULL, NULL, 'ING', 'Ordern de ingreso', 'Parametro para el proceso de order de ingreso ', 'RECEIPT', NULL, NULL);
+INSERT INTO public.order_product_type (active, created_date, last_modified_date, code, "name", description, "action", created_by, last_modified_by) VALUES(true, NULL, NULL, 'SAL', 'Ordern de salida', 'Parametro para el proceso de order de salida', 'DISPATCH', NULL, NULL);
+
+
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-REG', 'Tipo de almacen regional', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-TRA', 'Tipo de almacen de transito', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-ESTA', 'Tipo de almacen de estacionalidad', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-INT', 'Tipo de almacen de interior', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-EXT', 'Tipo de almacen de exterior', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-DIST-MIN', 'Tipo de almacen de distribucion minorista', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-CONV', 'Tipo de almacen convencional East Theachester', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-INTEL', 'Tipo de almacen inteligente', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-FRIG', 'Tipo de almacen frigorifico', NULL, NULL);
+INSERT INTO public.storehouse_type (active, created_date, last_modified_date, code, "name", created_by, last_modified_by) VALUES(true, NULL, NULL, 'TIPO-MED', 'Tipo de almacen medicamentos', NULL, NULL);
+
+INSERT INTO public.storehouse (active, storehouse_type_id, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, (select id from public.storehouse_type where code='TIPO-REG' limit 1 ), NULL, NULL, 'ALM-CBBA', 'Almacen Cochabamba', 'Almacen regional para todo Cochabamba', NULL, NULL);
+INSERT INTO public.storehouse (active, storehouse_type_id, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, (select id from public.storehouse_type where code='TIPO-REG' limit 1 ), NULL, NULL, 'ALM-LP', 'Almacen La Paz', 'Almacen regional para todo La Paz', NULL, NULL);
+
+INSERT INTO public.product (active, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, NULL, NULL, 'A-001', 'Liquido de freno', 'Liquido de freno', NULL, NULL);
+INSERT INTO public.product (active, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, NULL, NULL, 'A-002', 'Grasa para rodamiento', 'Grasa para rodamiento', NULL, NULL);
+INSERT INTO public.product (active, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, NULL, NULL, 'A-003', 'Grasa para homocinetico', 'Grasa para homocinetico', NULL, NULL);
+INSERT INTO public.product (active, created_date, last_modified_date, code, "name", description, created_by, last_modified_by) VALUES(true, NULL, NULL, 'A-004', 'Liquido hidraulico', 'Liquido hidraulico', NULL, NULL);
+
+INSERT INTO public.stock (active, amount_in_stock, maximum_stock, minimum_stock, product_id, stock_alert, storehouse_id, created_date, last_modified_date, created_by, last_modified_by) VALUES(true, 5000.0, 500000.0, 1.0, (select id from public.product where code='A-001' limit 1), true, (select id from public.storehouse where code='ALM-CBBA' limit 1), NULL, NULL, NULL, NULL);
+INSERT INTO public.stock (active, amount_in_stock, maximum_stock, minimum_stock, product_id, stock_alert, storehouse_id, created_date, last_modified_date, created_by, last_modified_by) VALUES(true, 5000.0, 500000.0, 1.0, (select id from public.product where code='A-002' limit 1), true, (select id from public.storehouse where code='ALM-CBBA' limit 1), NULL, NULL, NULL, NULL);
+INSERT INTO public.stock (active, amount_in_stock, maximum_stock, minimum_stock, product_id, stock_alert, storehouse_id, created_date, last_modified_date, created_by, last_modified_by) VALUES(true, 5000.0, 500000.0, 1.0, (select id from public.product where code='A-003' limit 1), true, (select id from public.storehouse where code='ALM-CBBA' limit 1), NULL, NULL, NULL, NULL);
+INSERT INTO public.stock (active, amount_in_stock, maximum_stock, minimum_stock, product_id, stock_alert, storehouse_id, created_date, last_modified_date, created_by, last_modified_by) VALUES(true, 5000.0, 500000.0, 1.0, (select id from public.product where code='A-004' limit 1), true, (select id from public.storehouse where code='ALM-CBBA' limit 1), NULL, NULL, NULL, NULL);
