@@ -1,4 +1,9 @@
-Se cambio la ruta  
+# Instalacion 
+Programas necesarios.  
+- Java 17 instalado en la maquina  
+- Postgres 15 o superiores instalado  
+Para arrancar el sistema es necesario crear la base de datos "gestion_almacenes" en postgres.  
+Desplegar el proyecto y se crearan las tablas necesarias automaticamente
 
 #### Rutas
 - Ruta inicial: http://localhost:8081/storehouse/v1/
