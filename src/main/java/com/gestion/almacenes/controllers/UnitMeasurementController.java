@@ -59,6 +59,13 @@ public class UnitMeasurementController {
     return ResponseEntity.status(HttpStatus.OK).body(unitMeasurement);
   }
 
+  @Operation(summary = "Obtención de los datos del registro por el código identificador")
+  @GetMapping("/{code}")
+  public ResponseEntity<UnitMeasurement> getById(@PathVariable String code) {
+      UnitMeasurement unitMeasurement = unitMeasurementService.getByCode(code);
+      return ResponseEntity.status(HttpStatus.OK).body(unitMeasurement);
+  }
+
   @Operation(summary = "Eliminación del registro por el identificador")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Integer id) {

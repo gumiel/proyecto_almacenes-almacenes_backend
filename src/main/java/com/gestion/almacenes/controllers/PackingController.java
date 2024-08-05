@@ -58,6 +58,13 @@ public class PackingController {
     return ResponseEntity.status(HttpStatus.OK).body(packing);
   }
 
+  @Operation(summary = "Obtención de los datos del registro por el código identificador")
+  @GetMapping("/{code}")
+  public ResponseEntity<Packing> getById(@PathVariable String code) {
+      Packing packing = packingService.getByCode(code);
+      return ResponseEntity.status(HttpStatus.OK).body(packing);
+  }
+
   @Operation(summary = "Eliminación del registro por el identificador")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Integer id) {
