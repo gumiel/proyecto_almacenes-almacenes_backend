@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
 
 @Service
 @AllArgsConstructor
@@ -99,20 +100,20 @@ public class StockServiceImpl implements
 
   private Stock findStockById(Integer id) {
     return stockRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("Stock", id)
+        errorEntityNotFound(Stock.class, id)
     );
   }
 
   private Product findProductById(Integer productId) {
 
     return productRepository.findByIdAndActiveIsTrue(productId).orElseThrow(
-        () -> new EntityNotFound(Product.class.getSimpleName(), productId)
+        errorEntityNotFound(Product.class, productId)
     );
   }
 
   private Storehouse findStorehouseById(Integer storehouseId) {
     return storeHouseRepository.findByIdAndActiveIsTrue(storehouseId).orElseThrow(
-        () -> new EntityNotFound(Storehouse.class.getSimpleName(), storehouseId)
+        errorEntityNotFound(Storehouse.class, storehouseId)
     );
   }
 

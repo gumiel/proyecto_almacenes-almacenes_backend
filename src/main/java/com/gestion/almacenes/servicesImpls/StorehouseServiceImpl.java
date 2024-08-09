@@ -1,8 +1,9 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
+
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StoreHouseDto;
@@ -16,6 +17,7 @@ import com.gestion.almacenes.repositories.StorehouseProductRepository;
 import com.gestion.almacenes.repositories.StorehouseRepository;
 import com.gestion.almacenes.repositories.StorehouseTypeRepository;
 import com.gestion.almacenes.services.StorehouseService;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -23,10 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
 
 @Service
 @AllArgsConstructor
@@ -50,9 +48,10 @@ public class StorehouseServiceImpl implements
   @Override
   public Storehouse create(StoreHouseDto storeHousedto) {
 
-      if (storehouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
-          throw new DuplicateException("StoreHouse", "code", storeHousedto.getCode());
-      }
+    if (storehouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
+      errorDuplicate(Storehouse.class, "code", storeHousedto.getCode());
+
+    }
 
     StorehouseType storehouseType = this.findStorehouseTypeById(
         storeHousedto.getStorehouseTypeId());
@@ -65,17 +64,17 @@ public class StorehouseServiceImpl implements
 
   private StorehouseType findStorehouseTypeById(Integer storehouseTypeId) {
     return storehouseTypeRepository.findByIdAndActiveIsTrue(storehouseTypeId).orElseThrow(
-        () -> new EntityNotFound(StorehouseType.class.getSimpleName(), storehouseTypeId)
+        errorEntityNotFound(StorehouseType.class, storehouseTypeId)
     );
   }
 
   @Override
   public Storehouse update(Integer id, StoreHouseDto storeHousedto) {
     Storehouse storehouseFound = this.findStoreHouseById(id);
-      if (storehouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
-          storehouseFound.getId())) {
-          throw new DuplicateException("StoreHouse", "code", storeHousedto.getCode());
-      }
+    if (storehouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
+        storehouseFound.getId())) {
+      errorDuplicate(Storehouse.class, "code", storeHousedto.getCode());
+    }
 
     modelMapper.map(storeHousedto, storehouseFound);
 
@@ -86,11 +85,11 @@ public class StorehouseServiceImpl implements
   public Storehouse getById(Integer id) {
     return this.findStoreHouseById(id);
   }
-  
+
   @Override
   public Storehouse getByCode(String code) {
     return storehouseRepository.findByCodeAndActiveTrue(code).orElseThrow(
-      errorEntityNotFound(Storehouse.class, "code", code)
+        errorEntityNotFound(Storehouse.class, "code", code)
     );
   }
 
@@ -101,7 +100,7 @@ public class StorehouseServiceImpl implements
       storeHouse.setActive(false);
       storehouseRepository.save(storeHouse);
     } else {
-      throw new AlreadyDeletedException("StoreHouse", storeHouse.getId());
+      errorAlreadyDeleted(Storehouse.class, storeHouse.getId());
     }
   }
 
@@ -133,7 +132,7 @@ public class StorehouseServiceImpl implements
 
   private Storehouse findStoreHouseById(Integer id) {
     return storehouseRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound(Storehouse.class.getSimpleName(), id)
+        errorEntityNotFound(Storehouse.class, id)
     );
   }
 
@@ -142,7 +141,7 @@ public class StorehouseServiceImpl implements
 
     if (storehouseProductRepository.existsByStorehouseId_IdAndProductId_Id(dto.getStorehouseId(),
         dto.getProductId())) {
-      throw new DuplicateException(StorehouseProduct.class.getSimpleName(), "Almacen",
+      errorDuplicate(StorehouseProduct.class, "Almacen",
           dto.getStorehouseId().toString());
     }
 
@@ -162,7 +161,7 @@ public class StorehouseServiceImpl implements
 
   private Product findProductById(Integer id) {
     return productRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound(Product.class.getSimpleName(), id)
+        errorEntityNotFound(Product.class, id)
     );
   }
 

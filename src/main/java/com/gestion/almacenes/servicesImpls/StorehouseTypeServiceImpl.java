@@ -1,8 +1,9 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
+
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StorehouseTypeDto;
 import com.gestion.almacenes.entities.StorehouseType;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorProcess;
 
 @Service
 @AllArgsConstructor
@@ -36,7 +35,7 @@ public class StorehouseTypeServiceImpl implements
   public StorehouseType create(StorehouseTypeDto storehouseTypedto) {
 
     if (storehouseTypeRepository.existsByCodeAndActiveIsTrue(storehouseTypedto.getCode())) {
-      throw new DuplicateException("StorehouseType", "code", storehouseTypedto.getCode());
+      errorDuplicate(StorehouseType.class, "code", storehouseTypedto.getCode());
     }
 
     StorehouseType storehouseType = storehouseTypeMapper.fromDto(storehouseTypedto, null);
@@ -48,7 +47,7 @@ public class StorehouseTypeServiceImpl implements
     StorehouseType storehouseTypeFound = this.findStorehouseTypeById(id);
     if (storehouseTypeRepository.existsByCodeAndIdNotAndActiveIsTrue(storehouseTypedto.getCode(),
         storehouseTypeFound.getId())) {
-      throw new DuplicateException("StorehouseType", "code", storehouseTypedto.getCode());
+      errorDuplicate(StorehouseType.class, "code", storehouseTypedto.getCode());
     }
     StorehouseType storehouseType = storehouseTypeMapper.fromDto(storehouseTypedto,
         storehouseTypeFound);
@@ -64,7 +63,7 @@ public class StorehouseTypeServiceImpl implements
   @Override
   public StorehouseType getByCode(String code) {
     return storehouseTypeRepository.findByCodeAndActiveTrue(code).orElseThrow(
-      errorEntityNotFound(StorehouseType.class, "code", code)
+        errorEntityNotFound(StorehouseType.class, "code", code)
     );
   }
 
@@ -75,7 +74,7 @@ public class StorehouseTypeServiceImpl implements
       storehouseType.setActive(false);
       storehouseTypeRepository.save(storehouseType);
     } else {
-      throw new AlreadyDeletedException("StorehouseType", storehouseType.getId());
+      errorAlreadyDeleted(StorehouseType.class, storehouseType.getId());
     }
   }
 
@@ -98,7 +97,7 @@ public class StorehouseTypeServiceImpl implements
 
   private StorehouseType findStorehouseTypeById(Integer id) {
     return storehouseTypeRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("StorehouseType", id)
+        errorEntityNotFound(StorehouseType.class, id)
     );
   }
 

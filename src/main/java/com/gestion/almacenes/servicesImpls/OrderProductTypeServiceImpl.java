@@ -1,8 +1,9 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
+
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.OrderProductTypeDto;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorProcess;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +39,8 @@ public class OrderProductTypeServiceImpl implements
   public OrderProductType create(OrderProductTypeDto orderProductTypedto) {
 
     if (orderProductTypeRepository.existsByCodeAndActiveIsTrue(orderProductTypedto.getCode())) {
-      throw new DuplicateException(OrderProductType.class.getSimpleName(), "code", "");
+//      throw new DuplicateException(OrderProductType.class.getSimpleName(), "code", "");
+      errorDuplicate(OrderProductType.class, "code", orderProductTypedto.getCode());
     }
     OrderProductType orderProductType = new OrderProductType();
     modelMapper.map(orderProductTypedto, orderProductType);
@@ -52,7 +52,8 @@ public class OrderProductTypeServiceImpl implements
     OrderProductType orderProductTypeFound = this.findOrderTypeById(id);
     if (orderProductTypeRepository.existsByCodeAndIdNotAndActiveIsTrue(
         orderProductTypedto.getCode(), orderProductTypeFound.getId())) {
-      throw new DuplicateException("OrderType", "code", "");
+//      throw new DuplicateException("OrderType", "code", "");
+      errorDuplicate(OrderProductType.class, "code", orderProductTypedto.getCode());
     }
     modelMapper.map(orderProductTypedto, orderProductTypeFound);
     return orderProductTypeRepository.save(orderProductTypeFound);
@@ -66,7 +67,7 @@ public class OrderProductTypeServiceImpl implements
   @Override
   public OrderProductType getByCode(String code) {
     return orderProductTypeRepository.findByCodeAndActiveTrue(code).orElseThrow(
-      errorEntityNotFound(OrderProductType.class, "code", code)
+        errorEntityNotFound(OrderProductType.class, "code", code)
     );
   }
 
@@ -77,7 +78,8 @@ public class OrderProductTypeServiceImpl implements
       orderProductType.setActive(false);
       orderProductTypeRepository.save(orderProductType);
     } else {
-      throw new AlreadyDeletedException("OrderType", orderProductType.getId());
+//      throw new AlreadyDeletedException("OrderType", orderProductType.getId());
+      errorAlreadyDeleted(OrderProductType.class, orderProductType.getId());
     }
   }
 
@@ -100,7 +102,7 @@ public class OrderProductTypeServiceImpl implements
 
   private OrderProductType findOrderTypeById(Integer id) {
     return orderProductTypeRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound(OrderProductType.class.getSimpleName(), id)
+        errorEntityNotFound(OrderProductType.class, id)
     );
   }
 

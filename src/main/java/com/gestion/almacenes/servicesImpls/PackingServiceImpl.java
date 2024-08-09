@@ -1,14 +1,16 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
+
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.PackingDto;
 import com.gestion.almacenes.entities.Packing;
 import com.gestion.almacenes.repositories.PackingRepository;
 import com.gestion.almacenes.services.PackingService;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -16,10 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
 
 
 @Service
@@ -41,7 +39,7 @@ public class PackingServiceImpl implements
   public Packing create(PackingDto packingdto) {
 
     if (packingRepository.existsByCodeAndActiveIsTrue(packingdto.getCode())) {
-      throw new DuplicateException("Packing", "code", "1");
+      errorDuplicate(Packing.class, "code", packingdto.getCode());
     }
     Packing packing = new Packing();
     modelMapper.map(packingdto, packing);
@@ -53,7 +51,7 @@ public class PackingServiceImpl implements
     Packing packingFound = this.findPackingById(id);
     if (packingRepository.existsByCodeAndIdNotAndActiveIsTrue(packingdto.getCode(),
         packingFound.getId())) {
-      throw new DuplicateException("Packing", "code", "1");
+      errorDuplicate(Packing.class, "code", packingdto.getCode());
     }
     modelMapper.map(packingdto, packingFound);
     return packingRepository.save(packingFound);
@@ -67,7 +65,7 @@ public class PackingServiceImpl implements
   @Override
   public Packing getByCode(String code) {
     return packingRepository.findByCodeAndActiveTrue(code).orElseThrow(
-      errorEntityNotFound(Packing.class, "code", code)
+        errorEntityNotFound(Packing.class, "code", code)
     );
   }
 
@@ -78,7 +76,7 @@ public class PackingServiceImpl implements
       packing.setActive(false);
       packingRepository.save(packing);
     } else {
-      throw new AlreadyDeletedException("Packing", packing.getId());
+      errorAlreadyDeleted(Packing.class, packing.getId());
     }
   }
 
@@ -100,8 +98,9 @@ public class PackingServiceImpl implements
   }
 
   private Packing findPackingById(Integer id) {
+
     return packingRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("Packing", id)
+        errorEntityNotFound(Packing.class, id)
     );
   }
 
