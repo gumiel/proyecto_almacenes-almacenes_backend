@@ -60,7 +60,7 @@ public class ExceptionsCustom {
     // Si hay errores, lanzar la excepción
     if (bindingResult.hasErrors()) {
       try {
-        throw new MethodArgumentNotValidException(getMethodParameter(), bindingResult);
+        throw new MethodArgumentNotValidException(getMethodParameter(StorehouseType.class), bindingResult);
       } catch (MethodArgumentNotValidException e) {
         throw new RuntimeException(e);
       }
@@ -68,10 +68,10 @@ public class ExceptionsCustom {
 
   }
 
-  private static MethodParameter getMethodParameter() {
+  private static MethodParameter getMethodParameter(Class<?> data) {
     try {
       // Suponiendo que el método 'miError' está en esta misma clase
-      Method method = ExceptionsCustom.class.getMethod("miError", StorehouseType.class);
+      Method method = ExceptionsCustom.class.getMethod("miError", data);
 
       // Crear el MethodParameter para el primer parámetro del método 'miError'
       return new MethodParameter(method, 0);
