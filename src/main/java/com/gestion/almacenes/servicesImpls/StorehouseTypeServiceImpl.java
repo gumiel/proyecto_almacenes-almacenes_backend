@@ -3,6 +3,7 @@ package com.gestion.almacenes.servicesImpls;
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.miError;
 
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StorehouseTypeDto;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 @AllArgsConstructor
@@ -39,6 +41,7 @@ public class StorehouseTypeServiceImpl implements
     }
 
     StorehouseType storehouseType = storehouseTypeMapper.fromDto(storehouseTypedto, null);
+    miError(storehouseType);
     return storehouseTypeRepository.save(storehouseType);
   }
 
