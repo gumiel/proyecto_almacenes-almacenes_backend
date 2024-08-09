@@ -1,6 +1,7 @@
 package com.gestion.almacenes.servicesImpls;
 
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
 import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorProcess;
 
@@ -97,7 +98,7 @@ public class OrderProductServiceImpl implements
     OrderProduct orderProductFound = this.findOrderProductById(id);
     if (orderProductRepository.existsByCodeAndIdNotAndActiveIsTrue(
         orderProductdto.getCode(), orderProductFound.getId())) {
-      throw new DuplicateException(OrderProduct.class.getSimpleName(), "code", "");
+      errorDuplicate(OrderProduct.class, "code", orderProductdto.getCode());
     }
     Storehouse storehouse = this.findStorehouseById(orderProductdto.getStorehouseId());
     OrderProductType orderProductType = this.findOrderProductTypeById(
