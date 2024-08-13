@@ -1,8 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StoreHouseDto;
@@ -12,8 +9,8 @@ import com.gestion.almacenes.entities.Storehouse;
 import com.gestion.almacenes.entities.StorehouseProduct;
 import com.gestion.almacenes.entities.StorehouseType;
 import com.gestion.almacenes.repositories.ProductRepository;
-import com.gestion.almacenes.repositories.StoreHouseRepository;
 import com.gestion.almacenes.repositories.StorehouseProductRepository;
+import com.gestion.almacenes.repositories.StorehouseRepository;
 import com.gestion.almacenes.repositories.StorehouseTypeRepository;
 import com.gestion.almacenes.services.StorehouseService;
 import java.util.List;
@@ -25,13 +22,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
+
 @Service
 @AllArgsConstructor
 public class StorehouseServiceImpl implements
     StorehouseService {
 
 
-  private final StoreHouseRepository storeHouseRepository;
+  private final StorehouseRepository storehouseRepository;
   private final ModelMapper modelMapper = new ModelMapper();
   private final GenericMapper<Storehouse, StoreHouseDto> genericMapper = new GenericMapper<>(
       Storehouse.class);
@@ -41,15 +40,16 @@ public class StorehouseServiceImpl implements
 
   @Override
   public List<Storehouse> getAll() {
-    return storeHouseRepository.findAll();
+    return storehouseRepository.findAll();
   }
 
   @Override
   public Storehouse create(StoreHouseDto storeHousedto) {
 
-      if (storeHouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
-          throw new DuplicateException("StoreHouse", "code", storeHousedto.getCode());
-      }
+    if (storehouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
+      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
+
+    }
 
     StorehouseType storehouseType = this.findStorehouseTypeById(
         storeHousedto.getStorehouseTypeId());
@@ -57,26 +57,26 @@ public class StorehouseServiceImpl implements
     Storehouse storehouse = genericMapper.fromDto(storeHousedto);
     storehouse.setStorehouseType(storehouseType);
 
-    return storeHouseRepository.save(storehouse);
+    return storehouseRepository.save(storehouse);
   }
 
   private StorehouseType findStorehouseTypeById(Integer storehouseTypeId) {
     return storehouseTypeRepository.findByIdAndActiveIsTrue(storehouseTypeId).orElseThrow(
-        () -> new EntityNotFound(StorehouseType.class.getSimpleName(), storehouseTypeId)
+        errorEntityNotFound(StorehouseType.class, storehouseTypeId)
     );
   }
 
   @Override
   public Storehouse update(Integer id, StoreHouseDto storeHousedto) {
     Storehouse storehouseFound = this.findStoreHouseById(id);
-      if (storeHouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
-          storehouseFound.getId())) {
-          throw new DuplicateException("StoreHouse", "code", storeHousedto.getCode());
-      }
+    if (storehouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
+        storehouseFound.getId())) {
+      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
+    }
 
-    modelMapper.map(storeHousedto, storehouseFound);
+    storehouseFound = genericMapper.fromDto(storeHousedto);
 
-    return storeHouseRepository.save(storehouseFound);
+    return storehouseRepository.save(storehouseFound);
   }
 
   @Override
@@ -85,19 +85,26 @@ public class StorehouseServiceImpl implements
   }
 
   @Override
+  public Storehouse getByCode(String code) {
+    return storehouseRepository.findByCodeAndActiveTrue(code).orElseThrow(
+        errorEntityNotFound(Storehouse.class, "code", code)
+    );
+  }
+
+  @Override
   public void delete(Integer id) {
     Storehouse storeHouse = this.findStoreHouseById(id);
     if (storeHouse.getActive()) {
       storeHouse.setActive(false);
-      storeHouseRepository.save(storeHouse);
+      storehouseRepository.save(storeHouse);
     } else {
-      throw new AlreadyDeletedException("StoreHouse", storeHouse.getId());
+      errorAlreadyDeleted(Storehouse.class, storeHouse.getId());
     }
   }
 
   @Override
   public List<Storehouse> search(String code, String name) {
-    return storeHouseRepository.findAll();
+    return storehouseRepository.findAll();
   }
 
   @Override
@@ -107,7 +114,7 @@ public class StorehouseServiceImpl implements
     Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
     Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-    Page<Storehouse> storeHousePage = storeHouseRepository.findAll(pageable);
+    Page<Storehouse> storeHousePage = storehouseRepository.findAll(pageable);
 
     return genericMapper.fromEntity(storeHousePage);
 
@@ -122,8 +129,8 @@ public class StorehouseServiceImpl implements
 //    }
 
   private Storehouse findStoreHouseById(Integer id) {
-    return storeHouseRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound(Storehouse.class.getSimpleName(), id)
+    return storehouseRepository.findByIdAndActiveIsTrue(id).orElseThrow(
+        errorEntityNotFound(Storehouse.class, id)
     );
   }
 
@@ -132,7 +139,7 @@ public class StorehouseServiceImpl implements
 
     if (storehouseProductRepository.existsByStorehouseId_IdAndProductId_Id(dto.getStorehouseId(),
         dto.getProductId())) {
-      throw new DuplicateException(StorehouseProduct.class.getSimpleName(), "Almacen",
+      errorDuplicate(StorehouseProduct.class, "Almacen",
           dto.getStorehouseId().toString());
     }
 
@@ -152,7 +159,7 @@ public class StorehouseServiceImpl implements
 
   private Product findProductById(Integer id) {
     return productRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound(Product.class.getSimpleName(), id)
+        errorEntityNotFound(Product.class, id)
     );
   }
 

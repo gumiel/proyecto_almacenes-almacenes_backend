@@ -1,7 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.ProductDto;
@@ -18,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements
   public Product create(ProductDto productdto) {
 
     if (productRepository.existsByCodeAndActiveIsTrue(productdto.getCode())) {
-      throw new DuplicateException("Product", "code", productdto.getCode());
+      errorDuplicateInFieldCode(ProductDto.class, "code", productdto.getCode());
     }
 
     Product product = productMapper.fromDto(productdto, null);
@@ -56,7 +56,7 @@ public class ProductServiceImpl implements
     Product productFound = this.findProductById(id);
     if (productRepository.existsByCodeAndIdNotAndActiveIsTrue(productdto.getCode(),
         productFound.getId())) {
-      throw new DuplicateException("Product", "code", productdto.getCode());
+      errorDuplicateInFieldCode(ProductDto.class, "code", productdto.getCode());
     }
     Product product = productMapper.fromDto(productdto, productFound);
     product.setUnitMeasurement(
@@ -69,6 +69,13 @@ public class ProductServiceImpl implements
   @Override
   public Product getById(Integer id) {
     return this.findProductById(id);
+  }
+
+  @Override
+  public Product getByCode(String code) {
+    return productRepository.findByCodeAndActiveTrue(code).orElseThrow(
+        errorEntityNotFound(Product.class, "code", code)
+    );
   }
 
   @Override
@@ -96,13 +103,13 @@ public class ProductServiceImpl implements
 
   private Product findProductById(Integer id) {
     return productRepository.findById(id).orElseThrow(
-        () -> new EntityNotFound("Product", id)
+        errorEntityNotFound(Product.class, id)
     );
   }
 
   private UnitMeasurement findUnitMeasurementById(Integer unitMeasurementId) {
     return unitMeasurementRepository.findByIdAndActiveIsTrue(unitMeasurementId).orElseThrow(
-        () -> new EntityNotFound(UnitMeasurement.class.getSimpleName(), unitMeasurementId)
+        errorEntityNotFound(UnitMeasurement.class, unitMeasurementId)
     );
   }
 

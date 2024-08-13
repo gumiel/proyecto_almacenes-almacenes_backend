@@ -4,6 +4,7 @@ import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StorehouseTypeDto;
 import com.gestion.almacenes.entities.StorehouseType;
 import java.util.List;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 
 public interface StorehouseTypeService {
@@ -15,6 +16,8 @@ public interface StorehouseTypeService {
   StorehouseType update(Integer id, StorehouseTypeDto dto);
 
   StorehouseType getById(Integer id);
+
+  StorehouseType getByCode(String code);
 
   void delete(Integer id);
 

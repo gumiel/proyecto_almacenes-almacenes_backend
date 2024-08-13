@@ -31,7 +31,7 @@ public class OrderProduct extends Auditable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  private String orderCode;
+  private String code;
 
   private LocalDate registrationDate;
   private LocalTime registrationTime;
@@ -48,5 +48,9 @@ public class OrderProduct extends Auditable {
   private OrderProductType orderProductType;
 
   private String status;
+
+  @ManyToOne
+  @JoinColumn(name = "supplier_id")
+  private Supplier supplier;
 
 }

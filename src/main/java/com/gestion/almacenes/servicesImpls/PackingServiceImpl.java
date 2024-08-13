@@ -1,8 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.PackingDto;
@@ -17,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
+
 
 @Service
 @AllArgsConstructor
@@ -37,7 +37,7 @@ public class PackingServiceImpl implements
   public Packing create(PackingDto packingdto) {
 
     if (packingRepository.existsByCodeAndActiveIsTrue(packingdto.getCode())) {
-      throw new DuplicateException("Packing", "code", "1");
+      errorDuplicateInFieldCode(PackingDto.class, "code", packingdto.getCode());
     }
     Packing packing = new Packing();
     modelMapper.map(packingdto, packing);
@@ -49,7 +49,7 @@ public class PackingServiceImpl implements
     Packing packingFound = this.findPackingById(id);
     if (packingRepository.existsByCodeAndIdNotAndActiveIsTrue(packingdto.getCode(),
         packingFound.getId())) {
-      throw new DuplicateException("Packing", "code", "1");
+      errorDuplicateInFieldCode(PackingDto.class, "code", packingdto.getCode());
     }
     modelMapper.map(packingdto, packingFound);
     return packingRepository.save(packingFound);
@@ -61,13 +61,20 @@ public class PackingServiceImpl implements
   }
 
   @Override
+  public Packing getByCode(String code) {
+    return packingRepository.findByCodeAndActiveTrue(code).orElseThrow(
+        errorEntityNotFound(Packing.class, "code", code)
+    );
+  }
+
+  @Override
   public void delete(Integer id) {
     Packing packing = this.findPackingById(id);
     if (packing.getActive()) {
       packing.setActive(false);
       packingRepository.save(packing);
     } else {
-      throw new AlreadyDeletedException("Packing", packing.getId());
+      errorAlreadyDeleted(Packing.class, packing.getId());
     }
   }
 
@@ -89,8 +96,9 @@ public class PackingServiceImpl implements
   }
 
   private Packing findPackingById(Integer id) {
+
     return packingRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("Packing", id)
+        errorEntityNotFound(Packing.class, id)
     );
   }
 

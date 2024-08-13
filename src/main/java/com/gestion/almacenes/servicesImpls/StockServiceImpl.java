@@ -9,7 +9,7 @@ import com.gestion.almacenes.entities.Stock;
 import com.gestion.almacenes.entities.Storehouse;
 import com.gestion.almacenes.repositories.ProductRepository;
 import com.gestion.almacenes.repositories.StockRepository;
-import com.gestion.almacenes.repositories.StoreHouseRepository;
+import com.gestion.almacenes.repositories.StorehouseRepository;
 import com.gestion.almacenes.services.StockService;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class StockServiceImpl implements
 
   private final StockRepository stockRepository;
   private final GenericMapper<Stock, StockDto> genericMapper = new GenericMapper<>(Stock.class);
-  private final StoreHouseRepository storeHouseRepository;
+  private final StorehouseRepository storeHouseRepository;
   private final ProductRepository productRepository;
 
   @Override
@@ -39,7 +40,7 @@ public class StockServiceImpl implements
 
     if (stockRepository.existsByStorehouse_IdAndProduct_IdAndActiveTrue(stockdto.getStorehouseId(),
         stockdto.getProductId())) {
-      throw new EntityNotFound("nose", 2);
+      errorEntityNotFound(Stock.class, stockdto.getStorehouseId());
     }
 
     Storehouse storehouse = this.findStorehouseById(stockdto.getStorehouseId());
@@ -99,20 +100,20 @@ public class StockServiceImpl implements
 
   private Stock findStockById(Integer id) {
     return stockRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("Stock", id)
+        errorEntityNotFound(Stock.class, id)
     );
   }
 
   private Product findProductById(Integer productId) {
 
     return productRepository.findByIdAndActiveIsTrue(productId).orElseThrow(
-        () -> new EntityNotFound(Product.class.getSimpleName(), productId)
+        errorEntityNotFound(Product.class, productId)
     );
   }
 
   private Storehouse findStorehouseById(Integer storehouseId) {
     return storeHouseRepository.findByIdAndActiveIsTrue(storehouseId).orElseThrow(
-        () -> new EntityNotFound(Storehouse.class.getSimpleName(), storehouseId)
+        errorEntityNotFound(Storehouse.class, storehouseId)
     );
   }
 

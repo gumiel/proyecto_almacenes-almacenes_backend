@@ -1,7 +1,6 @@
 package com.gestion.almacenes.servicesImpls;
 
 import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
 import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
@@ -17,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -38,10 +39,10 @@ public class UnitMeasurementServiceImpl implements
   @Override
   public UnitMeasurement create(UnitMeasurementDto unitMeasurementdto) {
 
-    if (unitMeasurementRepository.existsByCodeUnitAndActiveIsTrue(
-        unitMeasurementdto.getCodeUnit())
+    if (unitMeasurementRepository.existsByCodeAndActiveIsTrue(
+        unitMeasurementdto.getCode())
     ) {
-      throw new DuplicateException("UnitMeasurement", "code", "a");
+      errorDuplicateInFieldCode(UnitMeasurementDto.class, "code", unitMeasurementdto.getCode());
     }
 
     UnitMeasurement unitMeasurement = new UnitMeasurement();
@@ -54,9 +55,9 @@ public class UnitMeasurementServiceImpl implements
   @Override
   public UnitMeasurement update(Integer id, UnitMeasurementDto unitMeasurementdto) {
     UnitMeasurement unitMeasurementFound = this.findUnitMeasurementById(id);
-    if (unitMeasurementRepository.existsByCodeUnitAndIdNotAndActiveIsTrue(
-        unitMeasurementdto.getCodeUnit(), unitMeasurementFound.getId())) {
-      throw new DuplicateException("UnitMeasurement", "code", "1");
+    if (unitMeasurementRepository.existsByCodeAndIdNotAndActiveIsTrue(
+        unitMeasurementdto.getCode(), unitMeasurementFound.getId())) {
+      errorDuplicateInFieldCode(UnitMeasurementDto.class, "code", unitMeasurementdto.getCode());
     }
     modelMapper.map(unitMeasurementdto, unitMeasurementFound);
 
@@ -69,13 +70,20 @@ public class UnitMeasurementServiceImpl implements
   }
 
   @Override
+  public UnitMeasurement getByCode(String code) {
+    return unitMeasurementRepository.findByCodeAndActiveTrue(code).orElseThrow(
+        errorEntityNotFound(UnitMeasurement.class, "code", code)
+    );
+  }
+
+  @Override
   public void delete(Integer id) {
     UnitMeasurement unitMeasurement = this.findUnitMeasurementById(id);
     if (unitMeasurement.getActive()) {
       unitMeasurement.setActive(false);
       unitMeasurementRepository.save(unitMeasurement);
     } else {
-      throw new AlreadyDeletedException("UnitMeasurement", unitMeasurement.getId());
+      errorAlreadyDeleted(UnitMeasurement.class, unitMeasurement.getId());
     }
   }
 
@@ -99,7 +107,7 @@ public class UnitMeasurementServiceImpl implements
 
   private UnitMeasurement findUnitMeasurementById(Integer id) {
     return unitMeasurementRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("UnitMeasurement", id)
+        errorEntityNotFound(UnitMeasurement.class, id)
     );
   }
 

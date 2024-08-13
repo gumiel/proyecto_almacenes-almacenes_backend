@@ -1,9 +1,6 @@
 package com.gestion.almacenes.servicesImpls;
 
 import com.gestion.almacenes.commons.config.CacheConfig;
-import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
-import com.gestion.almacenes.commons.exception.DuplicateException;
-import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.ConfigDto;
 import com.gestion.almacenes.entities.Config;
@@ -18,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -36,7 +35,7 @@ public class ConfigServiceImpl implements
   public Config create(ConfigDto configdto) {
 
     if (configRepository.existsByCodeAndActiveIsTrue(configdto.getCode())) {
-      throw new DuplicateException("Config", "code", "");
+      errorDuplicateInFieldCode(ConfigDto.class, "code", configdto.getCode());
     }
 
     Config config = configMapper.fromDto(configdto, null);
@@ -48,7 +47,7 @@ public class ConfigServiceImpl implements
     Config configFound = this.findConfigById(id);
     if (configRepository.existsByCodeAndIdNotAndActiveIsTrue(configdto.getCode(),
         configFound.getId())) {
-      throw new DuplicateException("Config", "code", id.toString());
+      errorDuplicateInFieldCode(ConfigDto.class, "code", configdto.getCode());
     }
     Config config = configMapper.fromDto(configdto, configFound);
     //config.setId(id);
@@ -60,6 +59,14 @@ public class ConfigServiceImpl implements
     return this.findConfigById(id);
   }
 
+  @Cacheable(value = CacheConfig.USER_INFO_CACHE, unless = "#result == null")
+  @Override
+  public Config getByCode(String code) {
+    return configRepository.findByCodeAndActiveTrue(code).orElseThrow(
+        errorEntityNotFound(Config.class, "code", code)
+    );
+  }
+
   @Override
   public void delete(Integer id) {
     Config config = this.findConfigById(id);
@@ -67,9 +74,10 @@ public class ConfigServiceImpl implements
       config.setActive(false);
       configRepository.save(config);
     } else {
-      throw new AlreadyDeletedException("Config", config.getId());
+      errorAlreadyDeleted(Config.class, config.getId());
     }
   }
+
 
   @Override
   public List<Config> getFiltered(String code, String name) {
@@ -89,16 +97,9 @@ public class ConfigServiceImpl implements
   }
 
   private Config findConfigById(Integer id) {
-    return configRepository.findByIdAndActiveIsTrue(id).orElseThrow(
-        () -> new EntityNotFound("Config", id)
-    );
-  }
 
-  @Cacheable(value = CacheConfig.USER_INFO_CACHE, unless = "#result == null")
-  @Override
-  public String getValueByCode(String code) {
-    return configRepository.getValueByCode(code).orElseThrow(
-        () -> new EntityNotFound(Config.class.getSimpleName(), "Codigo", code)
+    return configRepository.findByIdAndActiveIsTrue(id).orElseThrow(
+        errorEntityNotFound(Config.class, id)
     );
   }
 
