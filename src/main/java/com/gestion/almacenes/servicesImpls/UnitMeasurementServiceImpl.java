@@ -1,9 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-
 import com.gestion.almacenes.commons.exception.AlreadyDeletedException;
 import com.gestion.almacenes.commons.exception.EntityNotFound;
 import com.gestion.almacenes.commons.util.GenericMapper;
@@ -20,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -44,7 +42,7 @@ public class UnitMeasurementServiceImpl implements
     if (unitMeasurementRepository.existsByCodeAndActiveIsTrue(
         unitMeasurementdto.getCode())
     ) {
-      errorDuplicate(UnitMeasurement.class, "code", unitMeasurementdto.getCode());
+      errorDuplicateInFieldCode(UnitMeasurementDto.class, "code", unitMeasurementdto.getCode());
     }
 
     UnitMeasurement unitMeasurement = new UnitMeasurement();
@@ -59,7 +57,7 @@ public class UnitMeasurementServiceImpl implements
     UnitMeasurement unitMeasurementFound = this.findUnitMeasurementById(id);
     if (unitMeasurementRepository.existsByCodeAndIdNotAndActiveIsTrue(
         unitMeasurementdto.getCode(), unitMeasurementFound.getId())) {
-      errorDuplicate(UnitMeasurement.class, "code", unitMeasurementdto.getCode());
+      errorDuplicateInFieldCode(UnitMeasurementDto.class, "code", unitMeasurementdto.getCode());
     }
     modelMapper.map(unitMeasurementdto, unitMeasurementFound);
 

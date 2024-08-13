@@ -1,9 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.PackingDto;
@@ -18,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 
 @Service
@@ -39,7 +37,7 @@ public class PackingServiceImpl implements
   public Packing create(PackingDto packingdto) {
 
     if (packingRepository.existsByCodeAndActiveIsTrue(packingdto.getCode())) {
-      errorDuplicate(Packing.class, "code", packingdto.getCode());
+      errorDuplicateInFieldCode(PackingDto.class, "code", packingdto.getCode());
     }
     Packing packing = new Packing();
     modelMapper.map(packingdto, packing);
@@ -51,7 +49,7 @@ public class PackingServiceImpl implements
     Packing packingFound = this.findPackingById(id);
     if (packingRepository.existsByCodeAndIdNotAndActiveIsTrue(packingdto.getCode(),
         packingFound.getId())) {
-      errorDuplicate(Packing.class, "code", packingdto.getCode());
+      errorDuplicateInFieldCode(PackingDto.class, "code", packingdto.getCode());
     }
     modelMapper.map(packingdto, packingFound);
     return packingRepository.save(packingFound);

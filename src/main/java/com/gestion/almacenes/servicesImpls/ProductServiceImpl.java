@@ -1,8 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.ProductDto;
@@ -19,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +39,7 @@ public class ProductServiceImpl implements
   public Product create(ProductDto productdto) {
 
     if (productRepository.existsByCodeAndActiveIsTrue(productdto.getCode())) {
-      errorDuplicate(Product.class, "code", productdto.getCode());
+      errorDuplicateInFieldCode(ProductDto.class, "code", productdto.getCode());
     }
 
     Product product = productMapper.fromDto(productdto, null);
@@ -57,7 +56,7 @@ public class ProductServiceImpl implements
     Product productFound = this.findProductById(id);
     if (productRepository.existsByCodeAndIdNotAndActiveIsTrue(productdto.getCode(),
         productFound.getId())) {
-      errorDuplicate(Product.class, "code", productdto.getCode());
+      errorDuplicateInFieldCode(ProductDto.class, "code", productdto.getCode());
     }
     Product product = productMapper.fromDto(productdto, productFound);
     product.setUnitMeasurement(

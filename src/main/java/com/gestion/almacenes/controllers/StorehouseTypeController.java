@@ -61,8 +61,8 @@ public class StorehouseTypeController {
   }
 
   @Operation(summary = "Obtención de los datos del registro por el código identificador")
-  @GetMapping("/{code}")
-  public ResponseEntity<StorehouseType> getById(@PathVariable String code) {
+  @GetMapping("/getByCode/{code}")
+  public ResponseEntity<StorehouseType> getByCode(@PathVariable String code) {
     StorehouseType storehouseType = storehouseTypeService.getByCode(code);
     return ResponseEntity.status(HttpStatus.OK).body(storehouseType);
   }

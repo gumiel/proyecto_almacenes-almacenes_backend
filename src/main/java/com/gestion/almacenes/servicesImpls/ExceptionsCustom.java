@@ -43,24 +43,15 @@ public class ExceptionsCustom {
     throw new AlreadyDeletedException(data.getSimpleName(), id);
   }
 
-  public static void miError(StorehouseType data) {
+  public static void errorDuplicateInFieldCode(Class<?> data, String nameAttribute, String value) {
     // Crear un BindingResult vacío
-    BindingResult bindingResult = new BeanPropertyBindingResult(data, "usuario");
-    bindingResult.addError(new FieldError("usuario", "codigo", "El codigo esta mal"));
-//    // Validar manualmente las anotaciones en la clase Usuario
-//    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//    Set<ConstraintViolation<T>> violations = validator.validate(usuario);
-//
-//    // Si hay violaciones, añadirlas al BindingResult
-//    for (ConstraintViolation<Usuario> violation : violations) {
-//      String fieldName = ((PathImpl) violation.getPropertyPath()).getLeafNode().getName();
-//      bindingResult.addError(new FieldError("usuario", fieldName, violation.getMessage()));
-//    }
+    BindingResult bindingResult = new BeanPropertyBindingResult(null, data.getSimpleName());
+    bindingResult.addError(new FieldError(data.getSimpleName(), nameAttribute, "El código con valor ("+value+") ya existe."));
 
     // Si hay errores, lanzar la excepción
     if (bindingResult.hasErrors()) {
       try {
-        throw new MethodArgumentNotValidException(getMethodParameter(StorehouseType.class), bindingResult);
+        throw new MethodArgumentNotValidException(getMethodParameterFiled("errorDuplicateInFieldCode"), bindingResult);
       } catch (MethodArgumentNotValidException e) {
         throw new RuntimeException(e);
       }
@@ -68,10 +59,46 @@ public class ExceptionsCustom {
 
   }
 
-  private static MethodParameter getMethodParameter(Class<?> data) {
+  public static void errorDuplicateInField(Class<?> data, String nameAttribute, String value) {
+    // Crear un BindingResult vacío
+    BindingResult bindingResult = new BeanPropertyBindingResult(null, data.getSimpleName());
+    bindingResult.addError(new FieldError(data.getSimpleName(), nameAttribute, value));
+
+    // Si hay errores, lanzar la excepción
+    if (bindingResult.hasErrors()) {
+      try {
+        throw new MethodArgumentNotValidException(getMethodParameterFiled("errorDuplicateInField"), bindingResult);
+      } catch (MethodArgumentNotValidException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+  }
+
+  public static void miError(Class<?> data) {
+    // Crear un BindingResult vacío
+    BindingResult bindingResult = new BeanPropertyBindingResult(null, "usuario");
+    bindingResult.addError(new FieldError("usuario", "codigo", "El codigo esta mal"));
+
+    // Si hay errores, lanzar la excepción
+    if (bindingResult.hasErrors()) {
+      try {
+        throw new MethodArgumentNotValidException(getMethodParameter(), bindingResult);
+      } catch (MethodArgumentNotValidException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+  }
+
+  /**
+   * Correccion para el throw en las clases
+   * @return
+   */
+  private static MethodParameter getMethodParameter() {
     try {
       // Suponiendo que el método 'miError' está en esta misma clase
-      Method method = ExceptionsCustom.class.getMethod("miError", data);
+      Method method = ExceptionsCustom.class.getMethod("miError", Class.class);
 
       // Crear el MethodParameter para el primer parámetro del método 'miError'
       return new MethodParameter(method, 0);
@@ -80,15 +107,21 @@ public class ExceptionsCustom {
     }
   }
 
-  /*public static void miError(StorehouseType data) {
-    // Crear un BindingResult vacío
-    BindingResult bindingResult = new BeanPropertyBindingResult(data, "usuario");
-    bindingResult.addError(new FieldError("usuario", "codigo", "El codigo esta mal"));
+  /**
+   * Correccion para el throw en las clases
+   * @return
+   */
+  private static MethodParameter getMethodParameterFiled(String nameFunction) {
+    try {
+      // Suponiendo que el método 'miError' está en esta misma clase
+      Method method = ExceptionsCustom.class.getMethod(nameFunction, Class.class, String.class, String.class);
 
-    if (bindingResult.hasErrors()) {
-      // Lanzar una excepción genérica o personalizada
-      throw new IllegalArgumentException("Datos inválidos: " + bindingResult.getAllErrors());
+      // Crear el MethodParameter para el primer parámetro del método 'miError'
+      return new MethodParameter(method, 0);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException("No se pudo obtener el MethodParameter", e);
     }
-  }*/
+  }
+
 
 }

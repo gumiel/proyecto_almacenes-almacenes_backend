@@ -40,7 +40,7 @@ public class StockServiceImpl implements
 
     if (stockRepository.existsByStorehouse_IdAndProduct_IdAndActiveTrue(stockdto.getStorehouseId(),
         stockdto.getProductId())) {
-      throw new EntityNotFound("nose", 2);
+      errorEntityNotFound(Stock.class, stockdto.getStorehouseId());
     }
 
     Storehouse storehouse = this.findStorehouseById(stockdto.getStorehouseId());

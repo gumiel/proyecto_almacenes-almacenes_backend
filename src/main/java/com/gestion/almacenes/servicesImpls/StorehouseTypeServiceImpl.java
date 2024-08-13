@@ -1,10 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.miError;
-
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StorehouseTypeDto;
 import com.gestion.almacenes.entities.StorehouseType;
@@ -19,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -37,11 +34,11 @@ public class StorehouseTypeServiceImpl implements
   public StorehouseType create(StorehouseTypeDto storehouseTypedto) {
 
     if (storehouseTypeRepository.existsByCodeAndActiveIsTrue(storehouseTypedto.getCode())) {
-      errorDuplicate(StorehouseType.class, "code", storehouseTypedto.getCode());
+      errorDuplicateInFieldCode(StorehouseTypeDto.class, "code", storehouseTypedto.getCode() );
     }
 
     StorehouseType storehouseType = storehouseTypeMapper.fromDto(storehouseTypedto, null);
-    miError(storehouseType);
+
     return storehouseTypeRepository.save(storehouseType);
   }
 
@@ -50,7 +47,7 @@ public class StorehouseTypeServiceImpl implements
     StorehouseType storehouseTypeFound = this.findStorehouseTypeById(id);
     if (storehouseTypeRepository.existsByCodeAndIdNotAndActiveIsTrue(storehouseTypedto.getCode(),
         storehouseTypeFound.getId())) {
-      errorDuplicate(StorehouseType.class, "code", storehouseTypedto.getCode());
+      errorDuplicateInFieldCode(StorehouseTypeDto.class, "code", storehouseTypedto.getCode());
     }
     StorehouseType storehouseType = storehouseTypeMapper.fromDto(storehouseTypedto,
         storehouseTypeFound);

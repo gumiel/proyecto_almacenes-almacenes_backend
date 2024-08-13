@@ -1,9 +1,5 @@
 package com.gestion.almacenes.servicesImpls;
 
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorAlreadyDeleted;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorDuplicate;
-import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.errorEntityNotFound;
-
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.StoreHouseDto;
@@ -25,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.gestion.almacenes.servicesImpls.ExceptionsCustom.*;
 
 @Service
 @AllArgsConstructor
@@ -49,7 +47,7 @@ public class StorehouseServiceImpl implements
   public Storehouse create(StoreHouseDto storeHousedto) {
 
     if (storehouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
-      errorDuplicate(Storehouse.class, "code", storeHousedto.getCode());
+      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
 
     }
 
@@ -73,10 +71,10 @@ public class StorehouseServiceImpl implements
     Storehouse storehouseFound = this.findStoreHouseById(id);
     if (storehouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
         storehouseFound.getId())) {
-      errorDuplicate(Storehouse.class, "code", storeHousedto.getCode());
+      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
     }
 
-    modelMapper.map(storeHousedto, storehouseFound);
+    storehouseFound = genericMapper.fromDto(storeHousedto);
 
     return storehouseRepository.save(storehouseFound);
   }
