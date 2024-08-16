@@ -16,16 +16,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "storehouse_product")
-@Schema( name = "Entity StorehouseProduct (Productos por almacen)")
-public class StorehouseProduct extends Auditable {
+@Table(name = "catalog")
+@Schema( name = "Entity CatalogProductStorehouse (Catalogo de productos por almacen)")
+public class CatalogProductStorehouse extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @ManyToOne
   @JoinColumn(name = "storehouse_id")
-  private Storehouse storehouseId;
+  private Storehouse storehouse;
   @ManyToOne
   @JoinColumn(name = "product_id")
   private Product product;
