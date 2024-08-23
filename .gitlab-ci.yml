@@ -17,6 +17,7 @@ job_1:
 #    - kill $variable
     - mvn dependency:go-offline
     - mvn clean install -DskipTests
+    - chmod 777 -R ejecutar_almacenes.sh
     - ./ejecutar_almacenes.sh
 #    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
 #    - docker stop almacenes-container
