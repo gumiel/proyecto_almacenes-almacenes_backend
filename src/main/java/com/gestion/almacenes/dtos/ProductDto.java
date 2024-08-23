@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Schema( name = "DTO ProductDto (DTO Producto)")
+@Schema(name = "DTO ProductDto (DTO Producto)")
 public class ProductDto {
 
   @ValidCode
@@ -28,11 +29,16 @@ public class ProductDto {
   @Schema(description = "Nombre del producto")
   private String name;
 
-    @NotNull( message = "{field} Descripción {is.required}" )
-    @NotBlank( message = "{field} Descripción {cant.be.empty}" )
-    @Size(max = 500, message = "{field} Descripción {cannot.have.more.than} 500 {characters}")
-    private String description;
-    @NotNull( message = "{field} Identificador de Unidad de medida {is.required}" )
-    private Integer unitMeasurementId;
+  @NotNull(message = "{field} Descripción {is.required}")
+  @NotBlank(message = "{field} Descripción {cant.be.empty}")
+  @Size(max = 500, message = "{field} Descripción {cannot.have.more.than} 500 {characters}")
+  private String description;
+
+  @NotNull(message = "{field} Identificador de Unidad de medida {is.required}")
+  private Integer unitMeasurementId;
+
+  private Boolean selectAllStorehouse;
+
+  private List<StorehouseDto> storehouseDtos;
 
 }

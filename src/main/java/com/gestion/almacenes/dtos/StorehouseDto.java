@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Schema( name = "DTO StoreHouseDto (DTO Almacen)")
-public class StoreHouseDto {
+public class StorehouseDto {
 
   @NotNull(message = "El campo Código es obligatorio")
   @NotBlank(message = "El campo Código es obligatorio")

@@ -3,6 +3,7 @@ package com.gestion.almacenes.servicesImpls;
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
 import com.gestion.almacenes.dtos.ProductDto;
+import com.gestion.almacenes.dtos.StorehouseDto;
 import com.gestion.almacenes.entities.Product;
 import com.gestion.almacenes.entities.UnitMeasurement;
 import com.gestion.almacenes.mappers.ProductMapper;
@@ -47,7 +48,21 @@ public class ProductServiceImpl implements
         this.findUnitMeasurementById(
             productdto.getUnitMeasurementId())
     );
-    return productRepository.save(product);
+
+    Product productNew = productRepository.save(product);
+
+    if(productdto.getStorehouseDtos().size()>=1){
+      if(productdto.getSelectAllStorehouse()){
+
+      }else{
+        for(StorehouseDto storehouseDto: productdto.getStorehouseDtos()){
+
+        }
+      }
+    }
+
+
+    return productNew;
   }
 
 
