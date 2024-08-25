@@ -26,19 +26,22 @@ public class ProductDto {
   @NotNull(message = "{field} Nombre {is.required}")
   @NotBlank(message = "{field} Nombre {cant.be.empty}")
   @Size(max = 100, message = "{field} Nombre {cannot.have.more.than} 100 {characters}")
-  @Schema(description = "Nombre del producto")
+  @Schema(description = "Nombre del producto.")
   private String name;
 
   @NotNull(message = "{field} Descripción {is.required}")
   @NotBlank(message = "{field} Descripción {cant.be.empty}")
   @Size(max = 500, message = "{field} Descripción {cannot.have.more.than} 500 {characters}")
+  @Schema(description = "Descripción del producto.")
   private String description;
 
   @NotNull(message = "{field} Identificador de Unidad de medida {is.required}")
   private Integer unitMeasurementId;
 
-  private Boolean selectAllStorehouse;
+  @Schema(description = "Atributo que identifica si se asociara a todos los almacenes.")
+  private Boolean selectAllStorehouse = false;
 
-  private List<StorehouseDto> storehouseDtos;
+  @Schema(description = "Lista de identificadores de almacenesalmacenes.")
+  private List<Integer> storehouseIds;
 
 }
