@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "catalog")
+@Table(name = "catalog_product_storehouse")
 @Schema( name = "Entity CatalogProductStorehouse (Catalogo de productos por almacen)")
 public class CatalogProductStorehouse extends Auditable {
 

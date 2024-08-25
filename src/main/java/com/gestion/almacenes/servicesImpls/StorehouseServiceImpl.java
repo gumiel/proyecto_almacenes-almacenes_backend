@@ -2,10 +2,8 @@ package com.gestion.almacenes.servicesImpls;
 
 import com.gestion.almacenes.commons.util.GenericMapper;
 import com.gestion.almacenes.commons.util.PagePojo;
-import com.gestion.almacenes.dtos.StoreHouseDto;
-import com.gestion.almacenes.entities.Product;
+import com.gestion.almacenes.dtos.StorehouseDto;
 import com.gestion.almacenes.entities.Storehouse;
-import com.gestion.almacenes.entities.CatalogProductStorehouse;
 import com.gestion.almacenes.entities.StorehouseType;
 import com.gestion.almacenes.repositories.ProductRepository;
 import com.gestion.almacenes.repositories.StorehouseProductRepository;
@@ -31,7 +29,7 @@ public class StorehouseServiceImpl implements
 
   private final StorehouseRepository storehouseRepository;
   private final ModelMapper modelMapper = new ModelMapper();
-  private final GenericMapper<Storehouse, StoreHouseDto> genericMapper = new GenericMapper<>(
+  private final GenericMapper<Storehouse, StorehouseDto> genericMapper = new GenericMapper<>(
       Storehouse.class);
   private final StorehouseProductRepository storehouseProductRepository;
   private final ProductRepository productRepository;
@@ -43,10 +41,10 @@ public class StorehouseServiceImpl implements
   }
 
   @Override
-  public Storehouse create(StoreHouseDto storeHousedto) {
+  public Storehouse create(StorehouseDto storeHousedto) {
 
     if (storehouseRepository.existsByCodeAndActiveIsTrue(storeHousedto.getCode())) {
-      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
+      errorDuplicateInFieldCode(StorehouseDto.class, "code", storeHousedto.getCode());
 
     }
 
@@ -66,11 +64,11 @@ public class StorehouseServiceImpl implements
   }
 
   @Override
-  public Storehouse update(Integer id, StoreHouseDto storeHousedto) {
+  public Storehouse update(Integer id, StorehouseDto storeHousedto) {
     Storehouse storehouseFound = this.findStoreHouseById(id);
     if (storehouseRepository.existsByCodeAndIdNotAndActiveIsTrue(storeHousedto.getCode(),
         storehouseFound.getId())) {
-      errorDuplicateInFieldCode(StoreHouseDto.class, "code", storeHousedto.getCode());
+      errorDuplicateInFieldCode(StorehouseDto.class, "code", storeHousedto.getCode());
     }
 
     storehouseFound = genericMapper.fromDto(storeHousedto);

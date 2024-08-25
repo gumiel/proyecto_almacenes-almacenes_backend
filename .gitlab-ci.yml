@@ -12,14 +12,16 @@ job_1:
 #    - docker rmi spring-api-image
 #    - docker build -t "spring-api-image" .
 #    - docker compose up -d
-    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
-    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}') esto es igual que el anterior
-    - kill $variable esto es igual que el anterior
+#    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
+#    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}')
+#    - kill $variable
     - mvn dependency:go-offline
     - mvn clean install -DskipTests
-    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
+    - chmod 777 -R ejecutar_almacenes.sh
+    - ./ejecutar_almacenes.sh
+#    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
 #    - docker stop almacenes-container
 #    - docker rm almacenes-container
 #    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app
   only:
-    - master
+    - develop
