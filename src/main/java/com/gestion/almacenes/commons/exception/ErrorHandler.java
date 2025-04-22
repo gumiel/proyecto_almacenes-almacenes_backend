@@ -6,7 +6,7 @@ import com.gestion.almacenes.commons.exception.response.ErrorResponse;
 import com.gestion.almacenes.commons.exception.response.FieldErrorModel;
 import com.gestion.almacenes.commons.exception.response.ValidationErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,6 +15,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.List;
 
 @ControllerAdvice
 public class ErrorHandler {
@@ -114,6 +116,15 @@ public class ErrorHandler {
     HttpStatus status = HttpStatus.BAD_REQUEST;
     ErrorResponse response = new ErrorResponse(status.value(), status.name(), ex.getMessage(),
         req.getRequestURI());
+    return ResponseEntity.status(status).body(response);
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(HttpServletRequest req, DataIntegrityViolationException ex) {
+    HttpStatus status = HttpStatus.BAD_REQUEST;
+    ErrorResponse response = new ErrorResponse(status.value(), status.name(),
+            "Error de integridad de datos: no se puede eliminar el registro debido a relaciones con otros registros.",
+            req.getRequestURI());
     return ResponseEntity.status(status).body(response);
   }
 

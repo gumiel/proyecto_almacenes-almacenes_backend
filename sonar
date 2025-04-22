@@ -1,0 +1,45 @@
+job_sonar:
+  stage: stage_sonar
+  tags:
+    - dellv1-almacen
+  script:
+    - mvn verify sonar:sonar -D sonar.projectKey=SpringApp -D sonar.projectName=SpringApp -D sonar.host.url=http://192.168.1.29:9000 -D sonar.token=sqa_d22f8c9502065027cf11984f4e3e8efe0878db81
+    - cp target/sonar/report-task.txt ./sonar-report.txt
+    - echo "Esperando resultado de SonarQube..."
+    - |
+      SONAR_URL="http://192.168.1.29:9000"
+      SONAR_TOKEN="sqa_d22f8c9502065027cf11984f4e3e8efe0878db81"
+
+      # Extraer el ID de la tarea de SonarQube
+      CE_TASK_ID=$(grep "ceTaskId=" sonar-report.txt | cut -d'=' -f2)
+
+      # Esperar hasta que el análisis termine
+      while true; do
+        STATUS=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/ce/task?id=$CE_TASK_ID" | jq -r '.task.status')
+
+        if [[ "$STATUS" == "SUCCESS" ]]; then
+          echo "Análisis completado exitosamente."
+          break
+        elif [[ "$STATUS" == "FAILED" ]]; then
+          echo "❌ Error en el análisis de SonarQube"
+          exit 1
+        else
+          echo "⏳ Esperando a que SonarQube termine el análisis... (Estado: $STATUS)"
+          sleep 5
+        fi
+      done
+
+      # Obtener el estado del análisis
+      ANALYSIS_ID=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/ce/task?id=$CE_TASK_ID" | jq -r '.task.analysisId')
+      QUALITY_STATUS=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/qualitygates/project_status?analysisId=$ANALYSIS_ID" | jq -r '.projectStatus.status')
+
+      if [[ "$QUALITY_STATUS" == "ERROR" ]]; then
+        echo "❌ SonarQube detectó fallos en la calidad del código."
+        exit 1
+      fi
+
+  artifacts:
+    name: "Resumen de reporte SonarQube"
+    paths:
+      - ./sonar-report.txt
+  allow_failure: false

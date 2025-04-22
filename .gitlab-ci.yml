@@ -1,31 +1,143 @@
 stages:
-  - prueba
+  - stage_developer
+  - stage_sonar
+  - post_deploy
+  - initial
+  - dell_test
+  - dell_developer
+  - deploy
+  - postman
   - dell
 
-job_1:
-  stage: prueba
+
+#variables:
+#  URL_DB: ${URL_DB}
+#  USER_DB: $USER_DB
+#  PASS_DB: ${PASS_DB}
+variables:
+  #Variables para SonarQube
+  SONAR_TOKEN: sqa_d22f8c9502065027c
+  SONAR_PROJECT_KEY: SpringApp
+  SONAR_PROJECT_NAME: SpringApp
+  SONAR_HOST_URL: http://192.168.1.29:9000
+  CUSTOM_CONFIG_VALUE: "valor_desde_gitlab"
+
+deploy_production_dell:
+  stage: stage_developer
+  tags:
+    - dell512
+  script:
+    - mvn dependency:go-offline
+    - mvn clean install -DskipTests
+    #    - mvn spring-boot:run > app.log 2>&1 &
+    - chmod 777 -R ejecutar_almacenes.sh
+    - ./ejecutar_almacenes.sh
+#    - mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8099 --spring.datasource.url=jdbc:postgresql://localhost:5432/gestion_almacenes_test" > app.log 2>&1 &
+  only:
+    - develop
+
+job_sonar:
+  stage: stage_sonar
+  tags:
+    - dell512
+  script:
+#    - mvn verify sonar:sonar -D sonar.projectKey=$SONAR_PROJECT_KEY -D sonar.projectName=$SONAR_PROJECT_NAME -D sonar.host.url=$SONAR_HOST_URL -D sonar.token=$SONAR_TOKEN
+    - mvn verify sonar:sonar -D sonar.projectKey=SpringApp -D sonar.projectName=SpringApp -D sonar.host.url=http://192.168.1.29:9000 -D sonar.token=sqa_d22f8c9502065027cf11984f4e3e8efe0878db81
+    - cp target/sonar/report-task.txt ./sonar-report.txt
+  artifacts:
+    name: "Resumen de reporte SonarQube"
+    paths:
+      - ./sonar-report.txt
+  allow_failure: false
+  only:
+    - sonar
+
+
+create_jar:
+  stage: initial
+  tags:
+    - dell-almacen
+  script:
+    - mvn dependency:go-offline
+    - mvn clean install -DskipTests
+    - cp target/almacenes-0.0.1-SNAPSHOT.jar target/almacenes-0.0.1-SNAPSHOT_test.jar
+  artifacts:
+    name: "almacenes-0.0.1-SNAPSHOT.jar"
+    paths:
+      - ./target/almacenes-0.0.1-SNAPSHOT.jar
+  only:
+    - master
+
+up_application_test:
+  stage: dell_test
+  tags:
+    - dell-almacen
+  script:
+    #    - chmod 777 -R ejecutar_almacenes_test.sh
+    #    - ./ejecutar_almacenes_test.sh/
+    - mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8099" > app.log 2>&1 &
+  only:
+    - master
+  needs:
+    - create_jar
+
+run_test_postman:
+  stage: dell_test
+  tags:
+    - dell-almacen
+  script:
+    - newman run "https://api.getpostman.com/collections/36492379-9a197c75-2cf8-4463-af17-39661ee8b676?apikey=PMAK-6726d9deda5844000118b148-243bce3f9d5f9c8e6ce50" --environment "https://api.getpostman.com/environments/36492379-af6f793c-1c81-4a6f-8966-5869c3aff7a3?apikey=PMAK-6726d9deda5844000118b148-243bce3f9d5f9c8e6ce5" -r htmlextra --reporter-htmlextra-export ./recursos/Postman-Collection/report_postman.html
+  artifacts:
+    name: "Reporte HTML NEWMAN"
+    paths:
+      - ./recursos/Postman-Collection/report_postman.html
+  only:
+    - master
+  needs:
+    - up_application_test
+
+
+
+deploy_production:
+  stage: deploy
   tags:
     - digitalocean
   script:
-#    - echo "hola"
-#    - docker stop almacenes-container
-#    - docker rm almacenes-container
-#    - docker rmi spring-api-image
-#    - docker build -t "spring-api-image" .
-#    - docker compose up -d
-#    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
-#    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}')
-#    - kill $variable
+    #    - echo "Conectando a (${URL_DB}) con usuario ($USER_DB) y clave ($PASS_DB)."
+    #    - docker stop almacenes-container
+    #    - docker rm almacenes-container
+    #    - docker rmi spring-api-image
+    #    - docker build -t "spring-api-image" .
+    #    - docker compose up -d
+    #    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
+    #    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}')
+    #    - kill $variable
     - mvn dependency:go-offline
     - mvn clean install -DskipTests
     - chmod 777 -R ejecutar_almacenes.sh
-    - ./ejecutar_almacenes.sh
-#    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
-#    - docker stop almacenes-container
-#    - docker rm almacenes-container
-#    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app
+    #    - chmod 777 -R ejecutar_almacenes_postman.sh
+    - sudo ./ejecutar_almacenes.sh/
+  #    - ./ejecutar_almacenes_postman.sh
+  #    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
+  #    - docker stop almacenes-container
+  #    - docker rm almacenes-container
+  #    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app
   only:
-    - digital
+    - develop-bk
+
+#    https://github.com/DannyDainton/newman-reporter-htmlextra
+newman:
+  stage: postman
+  script:
+    - echo "Iniciando pruebas de postman."
+    - newman -v
+    - newman run ./recursos/Postman-Collection/Newman_Almacenes_QA.postman_collection.json -e ./recursos/Postman-Collection/env-production.postman_environment.json -r htmlextra --reporter-htmlextra-export ./recursos/Postman-Collection/report_postman.html
+  artifacts:
+    name: "Reporte HTML NEWMAN"
+    paths:
+      - ./recursos/Postman-Collection/report_postman.html
+  only:
+    - develop-bk
 
 job_2:
   stage: dell
@@ -33,21 +145,73 @@ job_2:
     - dell-almacen
   script:
     - echo "hola"
-#    - docker stop almacenes-container
-#    - docker rm almacenes-container
-#    - docker rmi spring-api-image
-#    - docker build -t "spring-api-image" .
-#    - docker compose up -d
-#    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
-#    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}')
-#    - kill $variable
-#    - mvn dependency:go-offline
-#    - mvn clean install -DskipTests
-#    - chmod 777 -R ejecutar_almacenes.sh
-#    - ./ejecutar_almacenes.sh
-#    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
-#    - docker stop almacenes-container
-#    - docker rm almacenes-container
-#    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app
+    - sudo docker rm -f almacenes-container-dev
+    - sudo docker rm -f postgres-container-dev
+    - sudo docker rmi spring-api-image
+    - sudo docker compose -f docker-compose-dev.yml up -d
+  
+  #    - docker stop almacenes-container
+  #    - docker rm almacenes-container
+  #    - docker rmi spring-api-image
+  #    - docker build -t "spring-api-image" .
+  #    - docker compose up -d
+  #    - pkill -f almacenes-0.0.1-SNAPSHOT.jar
+  #    - $variable=$(ps aux | grep almacenes-0.0.1-SNAPSHOT.jar | grep -v grep | awk '{print $2}')
+  #    - kill $variable
+  #    - mvn dependency:go-offline
+  #    - mvn clean install -DskipTests
+  #    - chmod 777 -R ejecutar_almacenes.sh
+  #    - ./ejecutar_almacenes.sh
+  #    - java -jar ./target/almacenes-0.0.1-SNAPSHOT.jar --spring.profiles.active=production
+  #    - docker stop almacenes-container
+  #    - docker rm almacenes-container
+  #    - docker run -d -p 8081:8081 --name almacenes-container almacenes-app
   only:
-    - develop
+    - develop-bk
+
+#clean_docker_test:
+#  stage: dell_test
+#  tags:
+#    - dell-almacen
+#  script:
+#    - echo "clean docker test"
+#    - |
+#      CONTAINER_NAME="almacenes-container-test"
+#      if docker ps --filter "name=$CONTAINER_NAME" --filter "status=running" | grep "$CONTAINER_NAME" > /dev/null; then
+#          echo "El contenedor $CONTAINER_NAME está en ejecución."
+#          docker rm -f almacenes-container-test
+#          docker rm -f postgres-container-test
+#          docker rmi spring-api-image
+#      fi
+#      docker compose -f docker-compose-staging.yml up -d
+#  only:
+#    - develop
+
+check_endpoint:
+  stage: post_deploy
+  tags:
+    - dell512
+  script:
+    - |
+      #exit 1
+      echo "Esperando 30 segundo hasta que despliegue"
+      sleep 30
+      
+      URL="http://192.168.1.29:8081/storehouse/v1/dictionary/generatedMarkDown"
+      RETRIES=5
+      DELAY=30  # Segundos entre intentos
+      for i in $(seq 1 $RETRIES); do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+        if [ "$STATUS" -eq 200 ]; then
+          echo "✅ El endpoint $URL está disponible (Código: $STATUS)"
+          exit 0
+        fi
+        echo "⏳ Intento $i/$RETRIES: El endpoint no está disponible (Código: $STATUS)"
+        sleep $DELAY
+      done
+      echo "❌ ERROR: El endpoint sigue caído después de $RETRIES intentos"
+      exit 1
+  needs: [deploy_production_dell]
+  allow_failure: true
+  only:
+    - develop1

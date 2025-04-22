@@ -1,4 +1,4 @@
-git s# Instalacion 
+# Instalacion 
 Programas necesarios.  
 - Java 17 instalado en la maquina  
 - Postgres 15 o superiores instalado  
@@ -7,9 +7,9 @@ Desplegar el proyecto y se crearan las tablas necesarias automaticamente
 
 #### Rutas
 - Ruta inicial: http://localhost:8081/storehouse/v1  
-- Ruta de producción: https://service-storehouse-production.onrender.com/storehouse/v1 (Esperar 45 segundo despues de ingresar a la Url para que se levante el servidor)  
+- Ruta de producción: https://almacen.gumiel.uk/storehouse/v1  
 - Documentación API-REST: http://localhost:8081/storehouse/v1/doc/swagger-ui/index.html  
-- Documentación API-REST de producción: https://service-storehouse-production.onrender.com/storehouse/v1/doc/swagger-ui/index.html (Esperar 45 segundo despues de ingresar a la Url para que se levante el servidor)  
+- Documentación API-REST de producción: https://almacen.gumiel.uk/storehouse/v1/doc/swagger-ui/index.html    
 - git remote add github https://github.com/gumiel/proyecto-almacenes_almacenes-backend.git
 
 #### Estructuras de las rutas  
@@ -53,7 +53,9 @@ https://drive.google.com/file/d/1eJOAwVdztWJ32v1LDdy8nAtcUXKRNO9V/view
 Analisis de codigo fuente para control de calidad  
 ```bash 
 docker pull sonarqube  
-docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest  
+sudo docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9397:9000 sonarqube:latest  
+sudo docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9397:9000 sonarqube:latest -v sonarqube_conf:/opt/sonarqube/conf -v sonarqube_data:/opt/sonarqube/data -v sonarqube_logs:/opt/sonarqube/logs -v sonarqube_extensions:/opt/sonarqube/extensions  
+sudo docker run --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9397:9000 -v sonarqube_conf:/opt/sonarqube/conf -v sonarqube_data:/opt/sonarqube/data -v sonarqube_logs:/opt/sonarqube/logs -v sonarqube_extensions:/opt/sonarqube/extensions sonarqube:latest  
 ./mvnw clean install  
 ./mvnw verify sonar:sonar -D sonar.token=sqa_71e14929e5f0442fd2f927f4191c5d6917e9e2e7  
 ./mvnw clean install -Dkiptest  
@@ -72,3 +74,18 @@ Los recursos consumidos para las pruebas estan en el directorio
 /recursos/Postman-Collection/*.json
 ```
 https://drive.google.com/file/d/1cAPJL675cGzgrsBAovUAxGxIB6n178xn/edit
+
+
+# Librerias y funcionalidades propias
+
+### ResponseEntityGeneric
+Centraliza las respuestas GET, POST, PUT, DELETE de los controladores en funciones estaticas que ayudaran a modificar rapidamente las mejoras
+
+### SonarQube
+key: sqa_a7aad90e075382d9bb34888bd7dfb9b3349a843e
+mvn verify sonar:sonar -D sonar.token=sqa_a7aad90e075382d9bb34888bd7dfb9b3349a843e
+
+
+## LOGS
+tail -f almacenes.log
+tail -n 100 -f almacenes.log

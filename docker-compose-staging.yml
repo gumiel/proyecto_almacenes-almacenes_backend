@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+
+  almacenes-container-test:
+    image: spring-api-image
+    container_name: almacenes-container-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9091"
+    environment:
+      - SPRING_PROFILES_ACTIVE=test
+    #    environment:
+    #      - SPRING_DATASOURCE_URL=
+    #      - SPRING_DATASOURCE_USERNAME=
+    #      - SPRING_DATASOURCE_PASSWORD=
+    network_mode: host

@@ -3,12 +3,12 @@ services:
 
   almacenes-container:
     image: spring-api-image
-    container_name: almacenes-container
+    container_name: almacenes-container-dev
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8082:8081"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-container:5432/gestion_almacenes
     networks:
@@ -18,7 +18,7 @@ services:
 
   postgres-container:
     image: 'postgres:15.7-alpine'
-    container_name: postgres-container
+    container_name: postgres-container-dev
     environment:
       POSTGRES_DB: gestion_almacenes
       POSTGRES_USER: postgres

@@ -1,0 +1,2811 @@
+{
+	"info": {
+		"_postman_id": "9a197c75-2cf8-4463-af17-39661ee8b676",
+		"name": "Newman_Almacenes_QA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36492379",
+		"_collection_link": "https://gestion-almacenes-hpg.postman.co/workspace/Team-Workspace~7ceb92cf-afd5-41f7-8e47-57f9e5e8c9a7/collection/36492379-9a197c75-2cf8-4463-af17-39661ee8b676?action=share&source=collection_link&creator=36492379"
+	},
+	"item": [
+		{
+			"name": "Parametricas",
+			"item": [
+				{
+					"name": "Tipos de Almacenes (Storehouse Type)",
+					"item": [
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$storehouseTypeId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$storehouseTypeCode\", jsonData.code)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"TIPO-ALM-/{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\":\"aa1 bb cc\"// \"Tipo de almacen convencional {{$randomCity}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/{{$storehouseTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"{{$storehouseTypeId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/getByCode?code={{$storehouseTypeCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$storehouseTypeCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/search",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"TIPO-ALM-/{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Tipo de almacenen {{$randomCity}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/{{$storehouseTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"{{$storehouseTypeId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"LENOVO-/{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Laptop Lenovo {{$randomCity}}\",\r\n    \"description\":\"Portatil de la marca Lenovo {{$randomCountry}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/{{$storehouseTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"{{$storehouseTypeId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Almacenes (Storehouse)",
+					"item": [
+						{
+							"name": "Get storehouseTypeId by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$storehouseTypeId\", jsonData.id)\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouseType/getByCode?code=TIPO-GEN",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouseType",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "TIPO-GEN"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$storehouseId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$storehouseCode\", jsonData.code)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"ALM-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"Descripcion de almances {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"almacen {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"storehouseTypeId\":\"{{$storehouseTypeId}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/{{$storehouseId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"{{$storehouseId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/getByCode?code={{$storehouseCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$storehouseCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/search",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"ALM-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"Descripcion de almances {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"almacen {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"storehouseTypeId\":\"{{$storehouseTypeId}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/{{$storehouseId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"{{$storehouseId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"code-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"description\",\r\n    \"name\": \"name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/{{$storehouseId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"{{$storehouseId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Unidades de medida (Unit Measurement)",
+					"item": [
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$unitMeasurementCode\", jsonData.code)\r",
+											"    pm.collectionVariables.set(\"$unitMeasurementId\", jsonData.id)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"SAL{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Ordern de salida\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    \r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/{{$unitMeasurementId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"{{$unitMeasurementId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by Code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/getByCode?code={{$unitMeasurementCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$unitMeasurementCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/search?codeUnit=Pza",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"search"
+									],
+									"query": [
+										{
+											"key": "codeUnit",
+											"value": "Pza"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"SAL{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Ordern de salida\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/{{$unitMeasurementId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"{{$unitMeasurementId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/{{$unitMeasurementId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"{{$unitMeasurementId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Productos (Product)",
+					"item": [
+						{
+							"name": "Get by code Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$storehouseId\", jsonData.id);\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/storehouse/getByCode?code=ALM-CBBA",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"storehouse",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "ALM-CBBA"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Unit Measurement by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$unitMeasurementId\", jsonData.id);\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/unitMeasurement/getByCode?code=Pza",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"unitMeasurement",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "Pza"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$productId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$productCode\", jsonData.code)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"LENOVO-{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Laptop Lenovo {{$randomCity}}\",\r\n    \"description\":\"Portatil de la marca Lenovo {{$randomCountry}}\",\r\n    \"unitMeasurementId\": {{$unitMeasurementId}},\r\n    //\"storehouseIds\": [{{$storehouseId}}],\r\n    \"approximateUnitPrice\": 100,\r\n    \"selectAllStorehouse\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/{{$productId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{$productId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/getByCode?code={{$productCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$productCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/search",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"LENOVO-/{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Laptop Lenovo {{$randomCity}}\",\r\n    \"description\": \"Portatil de la marca Lenovo {{$randomCountry}}\",\r\n    \"unitMeasurementId\": {{$unitMeasurementId}},\r\n    \"selectAllStorehouse\": false,\r\n    /*\"storehouseIds\": [\r\n        1,\r\n        2,\r\n        3\r\n    ],*/\r\n    \"approximateUnitPrice\":120\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/{{$productId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{$productId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product/{{$productId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{$productId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tipos de ordenes (Order Type)",
+					"item": [
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$orderProductTypeId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$orderProductTypeCode\", jsonData.code)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"SAL{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"Parametro para el proceso de order de salida\",\r\n    \"name\": \"Ordern de salida\",\r\n    \"action\": \"DISPATCH\"//\"RECEIPT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/{{$orderProductTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"{{$orderProductTypeId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/getByCode?code={{$orderProductTypeCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$orderProductTypeCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/search",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"ALM-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"Descripcion de almances {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"almacen {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"action\": \"DISPATCH\"//\"RECEIPT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/{{$orderProductTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"{{$orderProductTypeId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/orderProductType/{{$orderProductTypeId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"orderProductType",
+										"{{$orderProductTypeId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Proveedores (Supplier)",
+					"item": [
+						{
+							"name": "Get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$supplierId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$supplierCode\", jsonData.supplierCode)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplierCode\": \"Comteco-SRL-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"supplierPhoneNumber\": \"\",\r\n    \"supplierCelNumber\": \"\",\r\n    \"companyName\": \"\",\r\n    \"address\": \"\",\r\n    \"companyDescription\": \"Compañia telefonica {{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"enable\": true,\r\n    \"ownerNames\": \"\",\r\n    \"ownerSurname\": \"\",\r\n    \"email\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/{{$supplierId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"{{$supplierId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by supplierCode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/getByCode?code={{$supplierCode}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"getByCode"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "{{$supplierCode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/search",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pageable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/pageable?page=0&size=10&sortField=id&sortOrder=ASC",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"pageable"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sortField",
+											"value": "id"
+										},
+										{
+											"key": "sortOrder",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"supplierCode\": \"Comteco-SRL-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"supplierPhoneNumber\": \"\",\r\n    \"supplierCelNumber\": \"\",\r\n    \"companyName\": \"\",\r\n    \"address\": \"\",\r\n    \"companyDescription\": \"Compañia telefonica {{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}-{{$randomAlphaNumeric}}\",\r\n    \"enable\": true,\r\n    \"ownerNames\": \"\",\r\n    \"ownerSurname\": \"\",\r\n    \"email\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/{{$supplierId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"{{$supplierId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/supplier/{{$supplierId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"supplier",
+										"{{$supplierId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Catalogo de productos por almacen (Catalog Product Storehouse)",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": 1,//{{$storehouseId}},\r\n    \"productId\": 1//{{$productId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/catalogProductStorehouse",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"catalogProductStorehouse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": 1,\r\n    \"productId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/catalogProductStorehouse/1",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"catalogProductStorehouse",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete by product and storehouse",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": 1,\r\n    \"productId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/catalogProductStorehouse/deleteByProductAndStorehouse",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"catalogProductStorehouse",
+										"deleteByProductAndStorehouse"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar a catalogo todos los productos de un almacenes especifico",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/catalogProductStorehouse/addAllProductsToStorehouse",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"catalogProductStorehouse",
+										"addAllProductsToStorehouse"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Stock",
+					"item": [
+						{
+							"name": "Create Product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$productId\", jsonData.id)\r",
+											"    pm.collectionVariables.set(\"$productCode\", jsonData.code)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"LENOVO-{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}{{$randomAlphaNumeric}}\",\r\n    \"name\": \"Laptop Lenovo {{$randomCity}}\",\r\n    \"description\":\"Portatil de la marca Lenovo {{$randomCountry}}\",\r\n    \"unitMeasurementId\": {{$unitMeasurementId}},\r\n    //\"storehouseIds\": [{{$storehouseId}}],\r\n    \"approximateUnitPrice\": 100,\r\n    \"selectAllStorehouse\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/product",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": {{$storehouseId}},\r\n    \"productId\": {{$productId}}, \r\n    \"amountInStock\": 500,\r\n    \"minimumStock\": 1,\r\n    \"maximumStock\": 500000,\r\n    \"stockAlert\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/stock",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"stock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Stock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$stockId\", jsonData.id)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": {{$storehouseId}},\r\n    \"productId\": {{$productId}},\r\n    \"quantityInStock\": 5000,\r\n    \"minimumStock\": 1,\r\n    \"maximumStock\": 500000,\r\n    \"stockAlert\": true,\r\n    \"unitPrice\": 100\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/stock",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"stock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": {{$storehouseId}},\r\n    \"productId\": {{$productId}}, \r\n    \"amountInStock\": 500,\r\n    \"minimumStock\": 1,\r\n    \"maximumStock\": 500000,\r\n    \"stockAlert\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/stock/{{$stockId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"stock",
+										"{{$stockId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Stock",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"storehouseId\": {{$storehouseId}},\r\n    \"productId\": {{$productId}}, \r\n    \"amountInStock\": 500,\r\n    \"minimumStock\": 1,\r\n    \"maximumStock\": 500000,\r\n    \"stockAlert\": true,\r\n    \"unitPrice\": 120\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/stock/{{$stockId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"stock",
+										"{{$stockId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Stock",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/stock/{{$stockId}}",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"stock",
+										"{{$stockId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Configuraciones (Config)",
+					"item": [
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.collectionVariables.set(\"$stockId\", jsonData.id)\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"config-{{$randomAbbreviation}}-{{$randomAlphaNumeric}}\",\r\n    \"description\": \"asdasd {{$randomBsBuzz}}\",\r\n    \"value\": 5000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{$baseUrl}}/config",
+									"host": [
+										"{{$baseUrl}}"
+									],
+									"path": [
+										"config"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "$storehouseTypeId",
+			"value": ""
+		},
+		{
+			"key": "$storehouseTypeCode",
+			"value": ""
+		},
+		{
+			"key": "$storehouseId",
+			"value": ""
+		},
+		{
+			"key": "$storehouseCode",
+			"value": ""
+		},
+		{
+			"key": "$unitMeasurementCode",
+			"value": ""
+		},
+		{
+			"key": "$unitMeasurementId",
+			"value": ""
+		},
+		{
+			"key": "$productId",
+			"value": ""
+		},
+		{
+			"key": "$productCode",
+			"value": ""
+		},
+		{
+			"key": "$orderProductTypeId",
+			"value": ""
+		},
+		{
+			"key": "$orderProductTypeCode",
+			"value": ""
+		},
+		{
+			"key": "$supplierId",
+			"value": ""
+		},
+		{
+			"key": "$supplierCode",
+			"value": ""
+		},
+		{
+			"key": "$stockId",
+			"value": ""
+		}
+	]
+}
