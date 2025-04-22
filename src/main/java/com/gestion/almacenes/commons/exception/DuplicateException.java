@@ -1,7 +1,6 @@
 package com.gestion.almacenes.commons.exception;
 
 import com.gestion.almacenes.commons.config.TranslateException;
-import com.gestion.almacenes.commons.util.Messages;
 
 public class DuplicateException extends RuntimeException {
 

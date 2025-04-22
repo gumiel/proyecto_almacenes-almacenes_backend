@@ -1,0 +1,100 @@
+1741311441566:hello-world
+1741311813306:list-entities-classes
+1741311942189:list-class-attributes
+1741311978929:list-class-attibutes com.gestion.almacenes.entities.CatalogProductStorehouse
+1741311986930:list-class-attibutes
+1741311993435:list-class-attributes
+1741312005372:list-class-attributes "com.gestion.almacenes.entities.CatalogProductStorehouse"
+1741312776973:list-entities-classes
+1741313287104:generate-dto "com.gestion.almacenes.entities.Auditable"
+1741313618223:list-entities-classes
+1741313638781:generate-dto "com.gestion.almacenes.entities.Auditable"
+1741313757551:list-entities-classes
+1741313776590:generate-dto "com.gestion.almacenes.entities.Auditable"
+1741313875561:com.gestion.almacenes.entities.Auditable
+1741313886552:generate-dto "com.gestion.almacenes.entities.Auditable"
+1741313928991:list-entities-classes
+1741313947576:generate-dto "com.gestion.almacenes.entities.Auditable"
+1741314834222:list
+1741314842486:dto com.gestion.almacenes.entities.Auditable
+1741315232293:list
+1741315244598:dto com.gestion.almacenes.entities.Auditable
+1741315270049:list
+1741315287503:dto com.gestion.almacenes.entities.Auditable
+1741403759970:list
+1741403777381:dto com.gestion.almacenes.entities.Auditable
+1741406593276:dtoo com.gestion.almacenes.entities.CatalogProductStorehouse
+1741464940597:list
+1741464950901:dtoo com.gestion.almacenes.entities.Config
+1741465423783:dtoo com.gestion.almacenes.entities.CatalogProductStorehouse
+1741466135752:list
+1741466165573:dtoo com.gestion.almacenes.entities.Product
+1741466295632:dtoo com.gestion.almacenes.entities.StockDto
+1741466305975:dtoo com.gestion.almacenes.entities.Stock
+1741466371750:dtoo com.gestion.almacenes.entities.Supplier
+1741466404744:dtoo com.gestion.almacenes.entities.Storehouse
+1741466415953:dtoo com.gestion.almacenes.entities.StorehouseType
+1741466473079:dtoo com.gestion.almacenes.entities.OrderProductType
+1741466500769:dtoo com.gestion.almacenes.entities.OrderProduct
+1741466585448:dtoo com.gestion.almacenes.entities.OrderProductDetail
+1741466614481:dtoo com.gestion.almacenes.entities.Config
+1741466699961:CatalogProductStorehousedtoo com.gestion.almacenes.entities.CatalogProductStorehouse
+1741466711723:dtoo com.gestion.almacenes.entities.CatalogProductStorehouse
+1741466809889:dtoo com.gestion.almacenes.entities.OrderProduct
+1741466941345:dtoo dtoo com.gestion.almacenes.entities.OrderProduct
+1741466954384:dtoo com.gestion.almacenes.entities.OrderProduct
+1741467891513:dtoo com.gestion.almacenes.entities.Config
+1741488759086:dtoo com.gestion.almacenes.entities.ConfigurationParameter
+1741562999014:list
+1741566178885:all com.gestion.almacenes.entities.ConfigurationParameter
+1741566519268:dto com.gestion.almacenes.entities.ConfigurationParameter
+1741567150587:list
+1741567593819:dto com.gestion.almacenes.entities.Supplier
+1741567679566:filter com.gestion.almacenes.entities.Supplier
+1741567693363:repository com.gestion.almacenes.entities.Supplier
+1741567721477:controller com.gestion.almacenes.entities.Supplier
+1741568132175:list
+1741568140257:all UnitMeasurement
+1741568152403:all com.gestion.almacenes.entities.UnitMeasurement
+1741568264074:list
+1741568270402:dto UnitMeasurement
+1741568290471:dto com.gestion.almacenes.entities.UnitMeasurement
+1741568318732:list
+1741568325038:dto UnitMeasurement
+1741568404436:list
+1741568408752:dto UnitMeasurement
+1741569186696:list
+1741885206097:dto Config
+1741885210541:pojo Config
+1741885220335:filter Config
+1741885240862:mapper Config
+1741885939493:dto Product
+1741885952289:pojo Product
+1741885959363:filter Product
+1741885963672:mapper Product
+1741910988248:all Config
+1741910999544:remove Config
+1741911007392:delete Config
+1741911382674:pojo CatalogProductStorehouse
+1741911387240:filter CatalogProductStorehouse
+1741911391212:mapper CatalogProductStorehouse
+1741912433759:pojo OrderProduct
+1741912439351:mapper OrderProduct
+1741912444013:filter OrderProduct
+1741912446159:mapper OrderProduct
+1741913481407:pojo OrderProductDetail
+1741913486387:filter OrderProductDetail
+1741913492346:mapper OrderProductDetail
+1741914209268:pojo OrderProductType
+1741914211855:filter OrderProductType
+1741914214236:mapper OrderProductType
+1741915085991:pojo Stock
+1741915089678:filter Stock
+1741915092883:mapper Stock
+1741917098467:all StorehouseType
+1741918513628:pojo Supplier
+1741918517505:mapper Supplier
+1741918522526:filter Supplier
+1741919197876:pojo UnitMeasurement
+1741919201154:filter UnitMeasurement
+1741919208358:mapper UnitMeasurement

@@ -2,6 +2,7 @@ package com.gestion.almacenes.commons.customValidations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.util.regex.Pattern;
 
 public class ValidCodeValidator implements ConstraintValidator<ValidCode, String> {

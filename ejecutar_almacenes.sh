@@ -3,11 +3,12 @@
 # Definir variables
 JAR_PATH="./target/almacenes-0.0.1-SNAPSHOT.jar"
 LOG_PATH="./almacenes.log"
+SPRING_PROFILE="--spring.profiles.active=dev"
 
 # Comando para ejecutar la aplicación
 start_app() {
     echo "Iniciando aplicación Almacenes..."
-    nohup java -jar $JAR_PATH >> $LOG_PATH 2>&1 &
+    nohup java -jar $JAR_PATH $SPRING_PROFILE >> $LOG_PATH 2>&1 &
     echo "Aplicación iniciada con PID $!"
 }
 
